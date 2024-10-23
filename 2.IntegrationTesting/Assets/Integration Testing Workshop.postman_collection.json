@@ -1,0 +1,125 @@
+{
+	"info": {
+		"_postman_id": "c78ee688-455b-4623-b2d3-a4d5b0f373ef",
+		"name": "Integration Testing Workshop",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Create Customer",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"fullName\": \"Nick Chapsas\",\r\n    \"email\": \"nick@nickchapsas.com\",\r\n    \"gitHubUsername\": \"nickchapsas\",\r\n    \"dateOfBirth\": \"1993-04-20\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:5001/customers",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"customers"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Customer by Id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://localhost:5001/customers/cabf72b1-a856-49ab-a337-434cfb4086e7",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"customers",
+						"cabf72b1-a856-49ab-a337-434cfb4086e7"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get all customers",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://localhost:5001/customers",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"customers"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update customer",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"fullName\": \"Nick Chapsas\",\r\n    \"email\": \"nick@nickchapsas.com\",\r\n    \"gitHubUsername\": \"nickchapsas\",\r\n    \"dateOfBirth\": \"1993-04-20\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:5001/customers/cabf72b1-a856-49ab-a337-434cfb4086e7",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"customers",
+						"cabf72b1-a856-49ab-a337-434cfb4086e7"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete customer by id",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "https://localhost:5001/customers/369cbd3e-dd75-4c0c-b58f-2b74059a9873",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"customers",
+						"369cbd3e-dd75-4c0c-b58f-2b74059a9873"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

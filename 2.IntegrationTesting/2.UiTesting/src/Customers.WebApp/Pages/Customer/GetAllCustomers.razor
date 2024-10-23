@@ -1,0 +1,66 @@
+﻿@page "/customers"
+
+@using Customers.WebApp.Models
+@using Customers.WebApp.Services
+
+@inject ICustomerService CustomerService
+@inject NavigationManager NavigationManager
+@inject IJSRuntime JsRuntime
+
+<PageTitle>Retrieve all customers</PageTitle>
+
+<h1>All customers</h1>
+
+<table class="table">
+    <thead>
+    <tr>
+        <th scope="col">Fullname</th>
+        <th scope="col">Email</th>
+        <th scope="col">GitHub Username</th>
+        <th scope="col">Date of birth</th>
+        <th scope="col">Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var customer in _customers)
+    {
+        <tr>
+            <td>@customer.FullName</td>
+            <td>@customer.Email</td>
+            <td>@customer.GitHubUsername</td>
+            <td>@customer.DateOfBirth.ToString("dd/MM/yyyy")</td>
+            <td>
+                <button @onclick='() => NavigationManager.NavigateTo($"customer/{customer.Id}")' type="button" class="btn btn-primary">View</button>
+                <button @onclick='() => NavigationManager.NavigateTo($"update-customer/{customer.Id}")' type="button" class="btn btn-warning">Edit</button>
+                <button @onclick="() => Delete(customer)" type="button" class="btn btn-danger">Delete</button>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+@code {
+
+    [Parameter]
+    public Guid CustomerId { get; set; }
+
+    private List<Customer> _customers = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        _customers = (await CustomerService.GetAllAsync()).ToList();
+    }
+
+    private async Task Delete(Customer customer)
+    {
+        if (!await JsRuntime.InvokeAsync<bool>("confirm", $"Are you sure you want to delete the customer '{customer.FullName}'?"))
+            return;
+
+        var deleted = await CustomerService.DeleteAsync(customer!.Id);
+        if (deleted)
+        {
+            _customers.Remove(customer);
+        }
+    }
+
+}

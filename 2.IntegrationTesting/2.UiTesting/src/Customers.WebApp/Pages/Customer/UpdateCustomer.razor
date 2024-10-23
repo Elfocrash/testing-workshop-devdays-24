@@ -1,0 +1,112 @@
+﻿@page "/update-customer"
+@page "/update-customer/{CustomerId:guid}"
+
+@using Customers.WebApp.Models
+@using Customers.WebApp.Services
+@using FluentValidation
+
+@inject ICustomerService CustomerService
+@inject NavigationManager NavigationManager
+
+@if (_customerExists)
+{
+    <PageTitle>Update customer: @_customer!.FullName</PageTitle>
+    
+    if (!_customerUpdated)
+    {
+        <h1>Update customer</h1>
+        <EditForm id="update-customer-form" EditContext="_editContext" OnValidSubmit="@HandleValidSubmit">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+            <div class="form-group">
+                <label for="fullname">Fullname</label>
+                <InputText id="fullname" placeholder="Fullname" class="form-control" @bind-Value="_customer.FullName"/>
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <InputText id="email" placeholder="Email" class="form-control" type="email" @bind-Value="_customer.Email"/>
+            </div>
+            <div class="form-group">
+                <label for="github-username">GitHub Username</label>
+                <InputText id="github-username" placeholder="GitHub Username" class="form-control" @bind-Value="_customer.GitHubUsername"/>
+            </div>
+            <div class="form-group">
+                <label for="dob">Date of birth</label>
+                <InputDate id="dob" placeholder="Date of birth" class="form-control" @bind-Value="_customer.DateOfBirth"/>
+            </div>
+
+            <button type="submit" @onclick="ResetValidation" class="btn btn-primary">Submit</button>
+        </EditForm>
+    }
+    else
+    {
+        <h2>Customer update!</h2>
+        <p>
+            Get the customer details <a href="/customer/@_customer!.Id">here</a>
+        </p>
+    }
+}
+else
+{
+    <p>No customer found with this id</p>
+}
+
+
+@code {
+
+    [Parameter]
+    public Guid CustomerId { get; set; }
+
+    private bool _customerExists;
+    private Customer? _customer;
+    private EditContext? _editContext;
+    private ValidationMessageStore? _messageStore;
+    
+    private bool _customerUpdated = false;
+    
+    protected override async Task OnInitializedAsync()
+    {
+        _customer = await CustomerService.GetAsync(CustomerId);
+        if (_customer is null)
+        {
+            _customerExists = false;
+            return;
+        }
+        _customerExists = true;
+        _editContext = new(_customer);
+        _messageStore = new(_editContext);
+    }
+    
+    private async Task HandleValidSubmit()
+    {
+        try
+        {
+            await CustomerService.UpdateAsync(_customer!);
+            _customerUpdated = true;
+        }
+        catch (ValidationException ex)
+        {
+            foreach (var error in ex.Errors)
+            {
+                _messageStore?.Add(() => _customer!.GitHubUsername, error.ErrorMessage);
+            }
+            _editContext?.NotifyValidationStateChanged();
+        }
+    }
+
+    private void ResetPage()
+    {
+        NavigationManager.NavigateTo(NavigationManager.Uri, true);
+    }
+
+    private void ResetValidation()
+    {
+        if (_editContext!.IsModified())
+        {
+            _messageStore?.Clear();
+            _editContext = new(_customer!);
+            _messageStore = new(_editContext);
+        }
+    }
+
+}

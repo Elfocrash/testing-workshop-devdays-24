@@ -1,0 +1,101 @@
+﻿@page "/customer"
+@page "/customer/{CustomerId:guid}"
+
+@using Customers.WebApp.Models
+@using Customers.WebApp.Services
+
+@inject ICustomerService CustomerService
+@inject NavigationManager NavigationManager
+@inject IJSRuntime JsRuntime
+
+<PageTitle>Retrieve a customer</PageTitle>
+
+@if (CustomerId != Guid.Empty)
+{
+    if (_customer is null)
+    {
+        <p>No customer found with this id</p>
+    }
+    else
+    {
+        <h1>Customer details: @_customer.FullName</h1>
+
+        <div class="col-lg-8">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <p class="mb-0">Full Name</p>
+                        </div>
+                        <div class="col-sm-9">
+                            <p id="fullname-field" class="text-muted mb-0">@_customer.FullName</p>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <p class="mb-0">Email</p>
+                        </div>
+                        <div class="col-sm-9">
+                            <p id="email-field" class="text-muted mb-0">@_customer.Email</p>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <p class="mb-0">GitHub username</p>
+                        </div>
+                        <div class="col-sm-9">
+                            <p id="github-username-field" class="text-muted mb-0">@_customer.GitHubUsername</p>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <p class="mb-0">Date of birth</p>
+                        </div>
+                        <div class="col-sm-9">
+                            <p id="dob-field" class="text-muted mb-0">@_customer.DateOfBirth.ToString("dd/MM/yyyy")</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-4">
+                <button @onclick='() => NavigationManager.NavigateTo($"update-customer/{_customer.Id}")' type="button" class="btn btn-warning">Edit</button>
+                <button @onclick="() => Delete(_customer)" type="button" class="btn btn-danger">Delete</button>
+            </div>
+        </div>
+    }
+}
+else
+{
+    <p>
+        You can add a customer in the system <a href="/add-customer">here</a>
+    </p>
+}
+
+
+@code {
+
+    [Parameter]
+    public Guid CustomerId { get; set; }
+
+    private Customer? _customer;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _customer = await CustomerService.GetAsync(CustomerId);
+    }
+
+    private async Task Delete(Customer customer)
+    {
+        if (!await JsRuntime.InvokeAsync<bool>("confirm", $"Are you sure you want to delete the customer '{customer.FullName}'?"))
+            return;
+
+        await CustomerService.DeleteAsync(customer.Id);
+        NavigationManager.NavigateTo("");
+    }
+
+}

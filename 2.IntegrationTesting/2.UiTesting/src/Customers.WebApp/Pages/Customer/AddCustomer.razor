@@ -1,0 +1,97 @@
+﻿@page "/add-customer"
+
+@using Customers.WebApp.Models
+@using Customers.WebApp.Services
+@using FluentValidation
+
+@inject ICustomerService CustomerService
+@inject NavigationManager NavigationManager
+
+<PageTitle>Add new customer</PageTitle>
+
+<h1>Add new customer</h1>
+
+@if (!_customerCreated)
+{
+    <EditForm id="create-customer-form" EditContext="editContext" OnValidSubmit="@HandleValidSubmit">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+        <div class="form-group">
+            <label for="fullname">Fullname</label>
+            <InputText id="fullname" placeholder="Fullname" class="form-control" @bind-Value="customer.FullName"/>
+        </div>
+        <div class="form-group">
+            <label for="email">Email</label>
+            <InputText id="email" placeholder="Email" class="form-control" type="email" @bind-Value="customer.Email"/>
+        </div>
+        <div class="form-group">
+            <label for="github-username">GitHub Username</label>
+            <InputText id="github-username" placeholder="GitHub Username" class="form-control" @bind-Value="customer.GitHubUsername"/>
+        </div>
+        <div class="form-group">
+            <label for="dob">Date of birth</label>
+            <InputDate id="dob" placeholder="Date of birth" class="form-control" @bind-Value="customer.DateOfBirth"/>
+        </div>
+
+        <button type="submit" @onclick="ResetValidation" class="btn btn-primary">Submit</button>
+    </EditForm>
+}
+else
+{
+    <h2>Customer created!</h2>
+    <p>
+        Get the customer details <a href="/customer/@customer.Id">here</a>
+    </p>
+    <p>
+        <a href="" @onclick="@ResetPage">Click here</a> to add a new customer
+    </p>
+}
+
+
+@code {
+
+    private Customer customer = new();
+    private EditContext? editContext;
+    private ValidationMessageStore? messageStore;
+    
+    private bool _customerCreated = false;
+    
+    protected override void OnInitialized()
+    {
+        editContext = new(customer);
+        messageStore = new(editContext);
+    }
+    
+    private async Task HandleValidSubmit()
+    {
+        try
+        {
+            await CustomerService.CreateAsync(customer);
+            _customerCreated = true;
+        }
+        catch (ValidationException ex)
+        {
+            foreach (var error in ex.Errors)
+            {
+                messageStore?.Add(() => customer.GitHubUsername, error.ErrorMessage);
+            }
+            editContext?.NotifyValidationStateChanged();
+        }
+    }
+
+    private void ResetPage()
+    {
+        NavigationManager.NavigateTo(NavigationManager.Uri, true);
+    }
+
+    private void ResetValidation()
+    {
+        if (editContext!.IsModified())
+        {
+            messageStore?.Clear();
+            editContext = new(customer);
+            messageStore = new(editContext);
+        }
+    }
+
+}
