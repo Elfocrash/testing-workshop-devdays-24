@@ -1,8 +1,10 @@
-﻿namespace LegacyApp
+﻿using System;
+
+namespace LegacyApp
 {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName = "LegacyApp.IUserCreditService")]
-    public interface IUserCreditService
+    public interface IUserCreditService : IDisposable
     {
 
         [System.ServiceModel.OperationContractAttribute(Action = "http://totally-real-service.com/IUserCreditService/GetCreditLimit", ReplyAction = "http://totally-real-service.com/IUserCreditService/GetCreditLimitResponse")]
