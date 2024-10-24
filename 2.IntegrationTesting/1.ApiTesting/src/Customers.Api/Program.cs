@@ -14,6 +14,7 @@ var builder = WebApplication.CreateBuilder(new WebApplicationOptions
 
 var config = builder.Configuration;
 config.AddEnvironmentVariables("CustomersApi_");
+config.AddCommandLine(args);
 
 builder.Services.AddControllers();
     

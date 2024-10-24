@@ -87,6 +87,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{98EF849C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AmazingCalculator.Tests.Unit", "1.UnitTesting\1.Introduction\tests\AmazingCalculator.Tests.Unit\AmazingCalculator.Tests.Unit.csproj", "{55582870-12C9-44FA-A4E1-9E3B5640AE76}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GitHub.Api.Fake", "2.IntegrationTesting\1.ApiTesting\src\GitHub.Api.Fake\GitHub.Api.Fake.csproj", "{675BA8B0-1A19-467A-B09F-CD86F65DA382}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -133,6 +135,7 @@ Global
 		{FE92A496-B6A5-48AF-9F32-CC061F453A0E} = {100B8CDA-D663-4D12-ADBD-C1A73DA7E6C7}
 		{98EF849C-FF4B-410B-BC5A-73A712DB8553} = {9301C351-1CC9-473B-AF75-845194B5AFAE}
 		{55582870-12C9-44FA-A4E1-9E3B5640AE76} = {98EF849C-FF4B-410B-BC5A-73A712DB8553}
+		{675BA8B0-1A19-467A-B09F-CD86F65DA382} = {DF12A6F7-7E46-4D44-A305-38E81E80A7CC}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{8247F9E4-7777-46C5-AD3F-909CFFAA8761}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -207,5 +210,9 @@ Global
 		{55582870-12C9-44FA-A4E1-9E3B5640AE76}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{55582870-12C9-44FA-A4E1-9E3B5640AE76}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{55582870-12C9-44FA-A4E1-9E3B5640AE76}.Release|Any CPU.Build.0 = Release|Any CPU
+		{675BA8B0-1A19-467A-B09F-CD86F65DA382}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{675BA8B0-1A19-467A-B09F-CD86F65DA382}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{675BA8B0-1A19-467A-B09F-CD86F65DA382}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{675BA8B0-1A19-467A-B09F-CD86F65DA382}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
